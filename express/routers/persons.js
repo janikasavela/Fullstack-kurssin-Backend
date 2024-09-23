@@ -1,7 +1,8 @@
-const express = require("express");
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
+const { Person } = require('../models/person')
 
-const persons = [
+/* const persons = [
   {
     id: 1,
     name: "Arto Hellas",
@@ -22,55 +23,83 @@ const persons = [
     name: "Mary Poppendieck",
     number: "39-23-6423122",
   },
-];
+]; */
 
-router.get("/", (req, res) => {
-  res.send(persons);
-});
+router.get('/', async (req, res) => {
+  const persons = await Person.find().sort('name')
+  res.send(persons)
+})
 
-router.get("/info", (req, res) => {
-  const contacts = persons.length;
-  const date = new Date();
+router.get('/info', async (req, res) => {
+  const contacts = (await Person.find()).length
+  const date = new Date()
 
-  res.send(`<p>Phonebook has info for ${contacts} people. </p> <p>${date}</p>`);
-});
+  res.send(`<p>Phonebook has info for ${contacts} people. </p> <p>${date}</p>`)
+})
 
-router.get("/:id", (req, res) => {
-  const person = persons.find(
-    (person) => person.id === parseInt(req.params.id)
-  );
-  if (!person)
-    return res.status(404).send("The person with the given ID was not found");
-  res.send(person);
-});
+router.get('/:id', async (req, res, next) => {
+  Person.findById(req.params.id)
+    .then((person) => {
+      if (person) {
+        res.send(person)
+      } else {
+        res.status(404).send('The person with the given ID was not found')
+      }
+    })
+    .catch((err) => next(err))
+})
 
-router.delete("/:id", (req, res) => {
-  const person = persons.find(
-    (person) => person.id === parseInt(req.params.id)
-  );
-  if (!person)
-    return res.status(404).send("The person with the given ID was not found");
+router.delete('/:id', async (req, res, next) => {
+  await Person.findByIdAndDelete(req.params.id)
+    .then((person) => {
+      if (person) {
+        res.send(person)
+      } else {
+        return res
+          .status(404)
+          .send('The person with the given ID was not found')
+      }
+    })
+    .catch((err) => next(err))
+})
 
-  const index = persons.indexOf(person);
-  persons.splice(index, 1);
-  res.send(person);
-});
-
-router.post("/", (req, res) => {
+router.put('/:id', async (req, res, next) => {
   if (!req.body.name || !req.body.number)
-    return res.status(400).send("Name and number are both required");
+    return res.status(400).send('Name and number are both required')
 
-  if (persons.find((person) => person.name === req.body.name))
-    return res.status(400).send("Name already added to a phonebook");
+  await Person.findByIdAndUpdate(
+    req.params.id,
+    {
+      name: req.body.name,
+      number: req.body.number,
+    },
+    { new: true, runValidators: true, context: 'query' }
+  )
+    .then((person) => {
+      if (person) {
+        res.send(person)
+      } else {
+        res.status(404).send('The genre with the given ID was not found')
+      }
+    })
+    .catch((err) => next(err))
+})
 
-  const person = {
-    id: Math.floor(Math.random() * 990) + 10,
+router.post('/', async (req, res, next) => {
+  if (!req.body.name || !req.body.number)
+    return res.status(400).send('Name and number are both required')
+
+  let person = new Person({
     name: req.body.name,
     number: req.body.number,
-  };
+  })
 
-  persons.push(person);
-  res.send(person);
-});
+  await person
+    .save()
+    .then((person) => {
+      res.send(person)
+    })
+    .catch((err) => next(err))
+})
 
-module.exports = router;
+module.exports = router
