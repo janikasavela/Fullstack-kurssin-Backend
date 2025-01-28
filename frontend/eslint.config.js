@@ -10,7 +10,9 @@ export default [
     files: ['**/*.{js,jsx}'],
     languageOptions: {
       ecmaVersion: 2020,
-      globals: globals.browser,
+      globals: {
+        ...globals.browser,
+      },
       parserOptions: {
         ecmaVersion: 'latest',
         ecmaFeatures: { jsx: true },
@@ -19,13 +21,9 @@ export default [
     },
     settings: { react: { version: '18.3' } },
     plugins: {
-      react, // Tämä määrittelee react-pluginin oikein flat config -muodossa
+      react,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
-    },
-    env: {
-      browser: true,
-      es2021: true,
     },
     extends: [
       'eslint:recommended',
