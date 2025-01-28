@@ -38,10 +38,15 @@ jobs:
           cd frontend
           npm run lint
 
+      - name: Prepare Deploy
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
       - name: Build and Deploy FullStack
         run: |
           cd backend
           npm run deploy:full
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       - name: See Fly Logs
         run: |
           cd backend
