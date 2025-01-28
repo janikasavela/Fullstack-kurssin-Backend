@@ -5,50 +5,54 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 
 export default [
+  // Ignoroi build ja dist hakemistot
   { ignores: ['dist'] },
+
+  // Konfiguraatio, joka koskee kaikkia .js ja .jsx tiedostoja
   {
     files: ['**/*.{js,jsx}'],
     languageOptions: {
-      ecmaVersion: 2020,
-      globals: {
-        ...globals.browser,
-      },
+      ecmaVersion: 2020, // Käytetään ECMAScript 2020
+      globals: globals.browser, // Määritellään globaalit muuttujat, kuten browser
       parserOptions: {
-        ecmaVersion: 'latest',
-        ecmaFeatures: { jsx: true },
-        sourceType: 'module',
+        ecmaVersion: 'latest', // Käytetään uusinta ECMAScript-versiota
+        ecmaFeatures: { jsx: true }, // Mahdollistetaan JSX
+        sourceType: 'module', // Käytetään module-lähde tyyppiä
       },
     },
-    settings: { react: { version: '18.3' } },
-    plugins: {
-      react,
-      'react-hooks': reactHooks,
-      'react-refresh': reactRefresh,
+    settings: {
+      react: { version: '18.3' }, // Määritellään Reactin versio
     },
-    extends: [
-      'eslint:recommended',
-      'plugin:react/recommended',
-      'plugin:react-hooks/recommended',
-    ],
-    parser: 'babel-eslint',
+    plugins: {
+      react, // Reactin plugin
+      'react-hooks': reactHooks, // React Hooksin plugin
+      'react-refresh': reactRefresh, // React Refresh plugin
+    },
+    parser: 'babel-eslint', // Parseri, joka tukee JSX:ää
     parserOptions: {
       ecmaFeatures: {
-        jsx: true,
+        jsx: true, // Mahdollistetaan JSX
       },
-      ecmaVersion: 12,
-      sourceType: 'module',
+      ecmaVersion: 12, // Käytetään ECMAScript 2021 versiota
+      sourceType: 'module', // Käytetään module-lähde tyyppiä
     },
     rules: {
+      // ESLintin suositellut säännöt
       ...js.configs.recommended.rules,
+      // Reactin suositellut säännöt
       ...react.configs.recommended.rules,
+      // JSX-runtime säännöt
       ...react.configs['jsx-runtime'].rules,
+      // React Hooksin suositellut säännöt
       ...reactHooks.configs.recommended.rules,
-      'react/jsx-no-target-blank': 'off',
+
+      // Mukautetut säännöt
+      'react/jsx-no-target-blank': 'off', // Poistetaan target="_blank" varoitus
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
-      ],
-      'react/prop-types': 0,
+      ], // Varoitus, jos ei ole komponentti, mutta on export
+      'react/prop-types': 0, // Poistetaan prop-types varoitus
     },
   },
 ]
