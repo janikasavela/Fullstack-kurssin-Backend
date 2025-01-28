@@ -1,59 +1,51 @@
-import js from "@eslint/js";
-import globals from "globals";
-import react from "eslint-plugin-react";
-import reactHooks from "eslint-plugin-react-hooks";
-import reactRefresh from "eslint-plugin-react-refresh";
+import js from '@eslint/js'
+import globals from 'globals'
+import react from 'eslint-plugin-react'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
 
 export default [
-  { ignores: ["dist"] },
+  // Ignoroi build ja dist hakemistot
+  { ignores: ['dist'] },
+
+  // Konfiguraatio, joka koskee kaikkia .js ja .jsx tiedostoja
   {
-    files: ["**/*.{js,jsx}"],
+    files: ['**/*.{js,jsx}'],
     languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
+      ecmaVersion: 2020, // Käytetään ECMAScript 2020
+      globals: globals.browser, // Määritellään globaalit muuttujat, kuten browser
       parserOptions: {
-        ecmaVersion: "latest",
-        ecmaFeatures: { jsx: true },
-        sourceType: "module",
+        ecmaVersion: 'latest', // Käytetään uusinta ECMAScript-versiota
+        ecmaFeatures: { jsx: true }, // Mahdollistetaan JSX
+        sourceType: 'module', // Käytetään module-lähde tyyppiä
       },
+      parser: 'babel-eslint', // Siirrettiin parser tänne
     },
-    settings: { react: { version: "18.3" } },
+    settings: {
+      react: { version: '18.3' }, // Määritellään Reactin versio
+    },
     plugins: {
-      react,
-      "react-hooks": reactHooks,
-      "react-refresh": reactRefresh,
+      react, // Reactin plugin
+      'react-hooks': reactHooks, // React Hooksin plugin
+      'react-refresh': reactRefresh, // React Refresh plugin
     },
-    "env": {
-    "browser": true,
-    "es2021": true
-  },
-  "extends": [
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:react-hooks/recommended"
-  ],
-  "parser": "babel-eslint",
-  "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
-    },
-    "ecmaVersion": 12,
-    "sourceType": "module"
-  },
-  "plugins": [
-    "react"
-  ],
     rules: {
+      // ESLintin suositellut säännöt
       ...js.configs.recommended.rules,
+      // Reactin suositellut säännöt
       ...react.configs.recommended.rules,
-      ...react.configs["jsx-runtime"].rules,
+      // JSX-runtime säännöt
+      ...react.configs['jsx-runtime'].rules,
+      // React Hooksin suositellut säännöt
       ...reactHooks.configs.recommended.rules,
-      "react/jsx-no-target-blank": "off",
-      "react-refresh/only-export-components": [
-        "warn",
+
+      // Mukautetut säännöt
+      'react/jsx-no-target-blank': 'off', // Poistetaan target="_blank" varoitus
+      'react-refresh/only-export-components': [
+        'warn',
         { allowConstantExport: true },
-      ],
-      "react/prop-types": 0,
+      ], // Varoitus, jos ei ole komponentti, mutta on export
+      'react/prop-types': 0, // Poistetaan prop-types varoitus
     },
   },
-];
+]
