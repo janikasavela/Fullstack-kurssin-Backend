@@ -36,7 +36,7 @@ jobs:
       - name: Lint Frontend Code
         run: |
           cd frontend
-          npm run eslint
+          npm run lint
 
       - name: Build and Deploy FullStack
         run: |
