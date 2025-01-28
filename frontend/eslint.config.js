@@ -1,42 +1,59 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import react from 'eslint-plugin-react'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh' // Lisäämämme plugin
+import js from "@eslint/js";
+import globals from "globals";
+import react from "eslint-plugin-react";
+import reactHooks from "eslint-plugin-react-hooks";
+import reactRefresh from "eslint-plugin-react-refresh";
 
 export default [
+  { ignores: ["dist"] },
   {
-    files: ['**/*.{js,jsx,ts,tsx}'],
+    files: ["**/*.{js,jsx}"],
     languageOptions: {
-      ecmaVersion: 'latest', // Käytetään uusinta ECMAScript-versiota
-      globals: globals.browser, // Määritellään globaaleiksi selainympäristön muuttujat
+      ecmaVersion: 2020,
+      globals: globals.browser,
       parserOptions: {
-        ecmaVersion: 2020, // Käytetään ECMAScript 2020
-        sourceType: 'module', // Käytetään module-lähdettä
-        ecmaFeatures: { jsx: true }, // Mahdollistetaan JSX
+        ecmaVersion: "latest",
+        ecmaFeatures: { jsx: true },
+        sourceType: "module",
       },
     },
-    settings: {
-      react: { version: 'detect' }, // Reactin versio automaattisesti tunnistetaan
-    },
+    settings: { react: { version: "18.3" } },
     plugins: {
-      react, // Reactin plugin
-      'react-hooks': reactHooks, // React Hooksin plugin
-      'react-refresh': reactRefresh, // React Refreshin plugin
+      react,
+      "react-hooks": reactHooks,
+      "react-refresh": reactRefresh,
     },
-    extends: [
-      'eslint:recommended', // Suositellut ESLintin säännöt
-      'plugin:react/recommended', // Suositellut Reactin säännöt
-      'plugin:react-hooks/recommended', // Suositellut React Hooksin säännöt
-    ],
+    "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended"
+  ],
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "react"
+  ],
     rules: {
-      'react/jsx-no-target-blank': 'warn', // Varoitus target="_blank" käytöstä ilman rel="noopener noreferrer"
-      'react/prop-types': 0, // Poistetaan prop-types tarkistukset (voi lisätä jos tarvitset)
-      'react/react-in-jsx-scope': 'off', // Vite ei tarvitse tätä
-      'react-refresh/only-export-components': [
-        'warn',
+      ...js.configs.recommended.rules,
+      ...react.configs.recommended.rules,
+      ...react.configs["jsx-runtime"].rules,
+      ...reactHooks.configs.recommended.rules,
+      "react/jsx-no-target-blank": "off",
+      "react-refresh/only-export-components": [
+        "warn",
         { allowConstantExport: true },
-      ], // React Refresh sääntö
+      ],
+      "react/prop-types": 0,
     },
   },
-]
+];
