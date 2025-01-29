@@ -12,3 +12,11 @@ POST https://express-wispy-wind-7618.fly.dev/api/persons Content-Type: applicati
 {
 "name": "new name", "number": "040-1234556"
 }
+
+//EDIT 29.1.2025: Lisäsin frontendin tähän samaan repoon, ja tein niille yhteisen CI/CD pipeline, joka:
+
+1. Linttaa frontendin ja backendin koodin aina, kun pushataan koodia tai tehdään pull request main-branchiin
+2. Tarkistaa commit viestin - jos siinä on #skip, se ei deployaa uutta koodia
+3. Varmistaa, että koodi on oikeasti menossa mainiin ennen deployta, eikä kyse ole vain pull requestista
+4. Buildaa frontendin ja redeployaa sekä frontendin että backendin
+5. Luo version tagin onnistuneen deployn jälkeen
