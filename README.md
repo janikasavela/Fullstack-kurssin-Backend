@@ -20,3 +20,9 @@ POST https://express-wispy-wind-7618.fly.dev/api/persons Content-Type: applicati
 3. Varmistaa, että koodi on oikeasti menossa mainiin ennen deployta, eikä kyse ole vain pull requestista
 4. Buildaa frontendin ja redeployaa sekä frontendin että backendin
 5. Luo version tagin onnistuneen deployn jälkeen
+
+Lisäksi muokkasin branchien asetuksia:
+
+- Edellyttää kaikkien pull requestien hyväksymistä ennen mergingiä
+- Edellyttää kaikkien status tarkastuksien läpäisyä ennen mergingiä
+- Myöskään repositoryn omistaja ei voi mergeä koodia ilman arvostelua
